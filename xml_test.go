@@ -16,7 +16,7 @@ import (
 	"strings"
 	"testing"
 
-	ixml "git.sauer-nbg.de/Kotarou/webdav/internal/xml"
+	ixml "./internal/xml"
 )
 
 func TestReadLockInfo(t *testing.T) {
