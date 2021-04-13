@@ -1,8 +1,5 @@
 # webdav
 
-#### How to get?
-
-`go get git.sauer-nbg.de/Kotarou/webdav`
 
 #### How to use? 
 
