@@ -15,6 +15,7 @@ import (
 	"path"
 	"strings"
 	"time"
+	"os"
 )
 
 type Handler struct {
@@ -511,10 +512,12 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 	if err != nil {
 		return status, err
 	}
+	os.Stderr.WriteString("handlePropfind called")
 	ctx := r.Context()
 	fi, err := h.FileSystem.Stat(ctx, reqPath)
 	if err != nil {
 		if os.IsNotExist(err) {
+			os.Stderr.WriteString("os.IsNotExist")
 			return http.StatusNotFound, err
 		}
 		return http.StatusMethodNotAllowed, err
