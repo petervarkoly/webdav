@@ -765,7 +765,7 @@ func walkFS(ctx context.Context, fs FileSystem, depth int, name string, info os.
 	}
 
 	//Set depth to 0 to avoid permissions errors in deeper directories
-        depth = 1
+        depth = 0
 	// Read directory names.
 	f, err := fs.OpenFile(ctx, name, os.O_RDONLY, 0)
 	if err != nil {
@@ -776,6 +776,8 @@ func walkFS(ctx context.Context, fs FileSystem, depth int, name string, info os.
 	if err != nil {
 		return walkFn(name, info, err)
 	}
+	//Ignore all errors.
+	return nil
 
 	for _, fileInfo := range fileInfos {
 		filename := path.Join(name, fileInfo.Name())
