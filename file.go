@@ -751,49 +751,49 @@ func copyFiles(ctx context.Context, fs FileSystem, src, dst string, overwrite bo
 func walkFS(ctx context.Context, fs FileSystem, depth int, name string, info os.FileInfo, walkFn filepath.WalkFunc) error {
 	// This implementation is based on Walk's code in the standard path/filepath package.
 	err := walkFn(name, info, nil)
-	if err != nil {
-		if info.IsDir() && err == filepath.SkipDir {
-			return nil
-		}
-		return nil
-	}
-	if !info.IsDir() || depth == 0 {
-		return nil
-	}
-	if depth == 1 {
-		depth = 0
-	}
-
-	// Read directory names.
-	f, err := fs.OpenFile(ctx, name, os.O_RDONLY, 0)
-	if err != nil {
-		return walkFn(name, info, err)
-	}
-	fileInfos, err := f.Readdir(0)
-	f.Close()
-	if err != nil {
-		return walkFn(name, info, err)
-	}
-
-	for _, fileInfo := range fileInfos {
-		filename := path.Join(name, fileInfo.Name())
-		fileInfo, err := fs.Stat(ctx, filename)
-		if err != nil {
-			if err := walkFn(filename, fileInfo, err); err != nil && err != filepath.SkipDir {
-				//return err
-				//Do not report error ignore it.
-				continue
-			}
-		} else {
-			err = walkFS(ctx, fs, depth, filename, fileInfo, walkFn)
-			if err != nil {
-				if !fileInfo.IsDir() || err != filepath.SkipDir {
-					//return err
-					//Do not report error ignore it.
-					continue
-				}
-			}
-		}
-	}
+//if err != nil {
+//	if info.IsDir() && err == filepath.SkipDir {
+//		return nil
+//	}
+//	return nil
+//}
+//if !info.IsDir() || depth == 0 {
+//	return nil
+//}
+//if depth == 1 {
+//	depth = 0
+//}
+//
+//// Read directory names.
+//f, err := fs.OpenFile(ctx, name, os.O_RDONLY, 0)
+//if err != nil {
+//	return walkFn(name, info, err)
+//}
+//fileInfos, err := f.Readdir(0)
+//f.Close()
+//if err != nil {
+//	return walkFn(name, info, err)
+//}
+//
+//for _, fileInfo := range fileInfos {
+//	filename := path.Join(name, fileInfo.Name())
+//	fileInfo, err := fs.Stat(ctx, filename)
+//	if err != nil {
+//		if err := walkFn(filename, fileInfo, err); err != nil && err != filepath.SkipDir {
+//			//return err
+//			//Do not report error ignore it.
+//			continue
+//		}
+//	} else {
+//		err = walkFS(ctx, fs, depth, filename, fileInfo, walkFn)
+//		if err != nil {
+//			if !fileInfo.IsDir() || err != filepath.SkipDir {
+//				//return err
+//				//Do not report error ignore it.
+//				continue
+//			}
+//		}
+//	}
+//}
 	return nil
 }
