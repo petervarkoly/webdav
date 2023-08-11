@@ -750,7 +750,7 @@ func copyFiles(ctx context.Context, fs FileSystem, src, dst string, overwrite bo
 // walkFn returns filepath.SkipDir, walkFS will skip traversal of this node.
 func walkFS(ctx context.Context, fs FileSystem, depth int, name string, info os.FileInfo, walkFn filepath.WalkFunc) error {
 	// This implementation is based on Walk's code in the standard path/filepath package.
-	err := walkFn(name, info, nil)
+	walkFn(name, info, nil)
 //if err != nil {
 //	if info.IsDir() && err == filepath.SkipDir {
 //		return nil
