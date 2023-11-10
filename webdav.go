@@ -11,10 +11,10 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"strings"
 	"time"
-	"os"
 )
 
 type Handler struct {
@@ -547,6 +547,7 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 			}
 			pstat := Propstat{Status: http.StatusOK}
 			for _, xmlname := range pnames {
+				h.Logger(r, fmt.Errorf("walkFn:"+xmlname.Local))
 				pstat.Props = append(pstat.Props, Property{XMLName: xmlname})
 			}
 			pstats = append(pstats, pstat)
@@ -640,10 +641,11 @@ const (
 // infiniteDepth. Parsing any other string returns invalidDepth.
 //
 // Different WebDAV methods have further constraints on valid depths:
-//	- PROPFIND has no further restrictions, as per section 9.1.
-//	- COPY accepts only "0" or "infinity", as per section 9.8.3.
-//	- MOVE accepts only "infinity", as per section 9.9.2.
-//	- LOCK accepts only "0" or "infinity", as per section 9.10.3.
+//   - PROPFIND has no further restrictions, as per section 9.1.
+//   - COPY accepts only "0" or "infinity", as per section 9.8.3.
+//   - MOVE accepts only "infinity", as per section 9.9.2.
+//   - LOCK accepts only "0" or "infinity", as per section 9.10.3.
+//
 // These constraints are enforced by the handleXxx methods.
 func parseDepth(s string) int {
 	switch s {
