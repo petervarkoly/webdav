@@ -547,7 +547,6 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 			}
 			pstat := Propstat{Status: http.StatusOK}
 			for _, xmlname := range pnames {
-				h.Logger(r, fmt.Errorf("walkFn:"+xmlname.Local))
 				pstat.Props = append(pstat.Props, Property{XMLName: xmlname})
 			}
 			pstats = append(pstats, pstat)
@@ -559,6 +558,8 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 		if err != nil {
 			return err
 		}
+		out := []byte(fmt.Sprintf("ps: %v\n", pstats))
+		os.WriteFile("/tmp/walkFn", out, 0644)
 		return mw.write(makePropstatResponse(path.Join(h.Prefix, reqPath), pstats))
 	}
 
