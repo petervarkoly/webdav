@@ -540,7 +540,8 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 			return err
 		}
 		var pstats []Propstat
-		file, _ := os.Open("/tmp/props")
+		file, _ := os.OpenFile("/tmp/props", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		file.WriteString("handlePropfind called\n")
 		if pf.Propname != nil {
 			pnames, err := propnames(ctx, h.FileSystem, h.LockSystem, reqPath)
 			if err != nil {
@@ -549,7 +550,7 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 			pstat := Propstat{Status: http.StatusOK}
 			for _, xmlname := range pnames {
 				pstat.Props = append(pstat.Props, Property{XMLName: xmlname})
-				file.WriteString("\n handlePropfind called " + xmlname.Local)
+				file.WriteString(xmlname.Local)
 			}
 			pstats = append(pstats, pstat)
 		} else if pf.Allprop != nil {
